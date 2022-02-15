@@ -1,27 +1,33 @@
 import React from "react";
 import "./styles.css";
 
-function App() {
-  const [counter, setCounter] = React.useState(0);
+const CounterContext = React.createContext(null);
 
+function App() {
   return (
-    <div className="App">
-      <Counter counter={counter} />
-      <CounterButton setCounter={setCounter} />
-    </div>
+    <CounterContext.Provider value={React.useState(0)}>
+      <div className="App">
+        <Counter />
+        <CounterButton />
+      </div>
+    </CounterContext.Provider>
   );
 }
 
-function CounterButton(props) {
+function CounterButton() {
+  const [, setCounter] = React.useContext(CounterContext);
+
   return (
-    <button onClick={() => props.setCounter((value) => value + 1)}>
+    <button onClick={() => setCounter((value) => value + 1)}>
       Increment counter
     </button>
   );
 }
 
-function Counter(props) {
-  return <h1>Counter: {props.counter}</h1>;
+function Counter() {
+  const [counter] = React.useContext(CounterContext);
+
+  return <h1>Counter: {counter}</h1>;
 }
 
 export default App;
